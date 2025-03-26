@@ -3,10 +3,22 @@
 set -eux
 
 # ルートディレクトリ
-cp .env.example .env
+if [ -f .env ]; then
+  echo "警告: .env ファイルが既に存在します。上書きしません。"
+else
+  cp .env.example .env
+fi
 
 # バックエンド
-cp packages/backend/.env.example packages/backend/.env
+if [ -f packages/backend/.env ]; then
+  echo "警告: packages/backend/.env ファイルが既に存在します。上書きしません。"
+else
+  cp packages/backend/.env.example packages/backend/.env
+fi
 
 # フロントエンド
-cp packages/frontend/.env.example packages/frontend/.env
+if [ -f packages/frontend/.env ]; then
+  echo "警告: packages/frontend/.env ファイルが既に存在します。上書きしません。"
+else
+  cp packages/frontend/.env.example packages/frontend/.env
+fi
