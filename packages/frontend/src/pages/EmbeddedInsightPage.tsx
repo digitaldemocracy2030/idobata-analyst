@@ -25,6 +25,17 @@ export const EmbeddedInsightPage = () => {
   const isAnalyticsRoute = location.pathname.endsWith("/analytics");
   const isCommentsRoute = location.pathname.endsWith("/comments");
 
+  // ビジュアル分析タブで植え込みコンテンツの余白を詰めたいので
+  useEffect(() => {
+    document.body.style.padding = "0";
+    document.body.style.margin = "0";
+
+    return () => {
+      document.body.style.padding = "";
+      document.body.style.margin = "";
+    };
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       if (!projectId) {
