@@ -166,6 +166,16 @@ export const StanceReport = ({
 
   const stanceStats = calculateStanceStats(selectedQuestion);
 
+  //コメント種類分布用計算
+  // コメントの種類ごとの件数を集計
+  const sourceTypeCounts: { [key: CommentSourceType]: number } = {};
+  comments.forEach(comment => {
+    const sourceType = comment.sourceType || 'other';
+    sourceTypeCounts[sourceType] = (sourceTypeCounts[sourceType] || 0) + 1;
+  });
+  // 全体のコメント数
+  const totalComments = comments.length;
+
   return (
     <div className="space-y-6">
       {/* 論点選択タブ */}
@@ -209,6 +219,23 @@ export const StanceReport = ({
           selectedQuestion={selectedQuestion}
           showTitle={false} // タイトルは上で表示しているので不要
         />
+
+        {/*コメント種類分布*/}
+        <div className="text-right mb-4">
+        コメントの種類分布：
+        {Object.entries(sourceTypeCounts)
+          .sort(([, countA], [, countB]) => countB - countA)
+          .map(([sourceType, count], index) => {
+            const percentage = totalComments > 0 ? ((count / totalComments) * 100).toFixed(1) : '0.0';
+            const sourceTypeName = getSourceTypeName(sourceType as CommentSourceType);
+            const style = getSourceTypeStyle(sourceType as CommentSourceType);
+            return (
+              <span key={sourceType} className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mr-1 ${style}`}>
+                {sourceTypeName}:{count}件({percentage}%)
+              </span>
+            );
+          })}
+      </div>
 
         {/* コメントリスト */}
         <div className="space-y-3 my-4">
