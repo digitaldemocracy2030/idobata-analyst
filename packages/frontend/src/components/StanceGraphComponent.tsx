@@ -21,7 +21,7 @@ interface StanceStats {
 }
 
 // 円グラフ用の色
-const CHART_COLORS = [
+export const CHART_COLORS = [
   "#3B82F6", // blue-500
   "#10B981", // emerald-500
   "#F59E0B", // amber-500

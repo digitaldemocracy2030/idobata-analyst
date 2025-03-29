@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import { useLocation, useNavigate } from "react-router-dom";
-import remarkGfm from "remark-gfm";
-import { analyzeStances } from "../config/api";
-import type { Comment, CommentSourceType } from "../types/comment";
-import type { Project, Question, StanceAnalysisReport } from "../types/project";
-import { convertBoldBrackets } from "../utils/markdownHelper";
-import { StanceGraphComponent } from "./StanceGraphComponent";
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Comment, CommentSourceType } from '../types/comment';
+import { Project, Question, StanceAnalysisReport } from '../types/project';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { analyzeStances } from '../config/api';
+import { convertBoldBrackets } from '../utils/markdownHelper';
+import { StanceGraphComponent, CHART_COLORS } from './StanceGraphComponent';
 
 interface StanceAnalyticsProps {
   comments: Comment[];
@@ -230,40 +230,44 @@ export const StanceReport = ({
                   <div className="grid grid-cols-1 gap-1">
                     {stats.comments
                       .slice(0, expandedStances[stanceId] ? undefined : 3)
-                      .map(
-                        (comment, index) =>
-                          comment.extractedContent && (
-                            <div
-                              key={comment._id}
-                              className={`
-                              bg-white px-3 py-2 text-sm border-l-4 border-blue-400
-                              ${
-                                !expandedStances[stanceId] && index === 2
-                                  ? "relative"
-                                  : ""
-                              }
+                      .map((comment, index) => (
+                        comment.extractedContent && (
+                          <div
+                            key={comment._id}
+                            className={`
+                              bg-white px-3 py-2 text-sm border-l-4
+                              ${!expandedStances[stanceId] && index === 2 ? 'relative' : ''}
                             `}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                  {comment.extractedContent}
-                                </div>
-                                {comment.sourceType && (
-                                  <div className="ml-2 flex-shrink-0">
-                                    <div className="group relative">
-                                      {comment.sourceUrl ? (
-                                        <a
-                                          href={comment.sourceUrl}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium hover:opacity-80 ${getSourceTypeStyle(
-                                            comment.sourceType,
-                                          )}`}
-                                        >
-                                          {getSourceTypeName(
-                                            comment.sourceType,
-                                          )}
-                                        </a>
+                            style={{
+                              borderLeftColor: stanceId !== 'other' && selectedQuestion.stances.findIndex(s => s.id === stanceId) >= 0
+                                ? CHART_COLORS[selectedQuestion.stances.findIndex(s => s.id === stanceId) % CHART_COLORS.length]
+                                : '#3B82F6' // blue-400の色コード（デフォルト）
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                {comment.extractedContent}
+                              </div>
+                              {comment.sourceType && (
+                                <div className="ml-2 flex-shrink-0">
+                                  <div className="group relative">
+                                    {comment.sourceUrl ? (
+                                      <a
+                                        href={comment.sourceUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium hover:opacity-80 ${getSourceTypeStyle(comment.sourceType)}`}
+                                      >
+                                        {getSourceTypeName(comment.sourceType)}
+                                      </a>
+                                    ) : (
+                                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getSourceTypeStyle(comment.sourceType)}`}>
+                                        {getSourceTypeName(comment.sourceType)}
+                                      </span>
+                                    )}
+                                    <div className="invisible group-hover:visible absolute z-10 w-64 p-2 mt-2 text-sm bg-gray-900 text-white rounded shadow-lg right-0">
+                                      {comment.sourceType === 'x' ? (
+                                        'X(Twitter)の規約上、元のコンテンツを表示できません。リンクから元の投稿をご確認ください。'
                                       ) : (
                                         <span
                                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getSourceTypeStyle(
