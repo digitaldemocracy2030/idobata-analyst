@@ -8,7 +8,7 @@ test: frontend-test backend-test chat-bot-test
 
 # ターゲット定義（makefile は薄いラッパーとして使う。複雑な処理を書かずシンプルに保つこと）
 containers-start:
-	docker compose watch
+	docker compose up --watch
 
 setup:
 	sh ./copy-env.sh
