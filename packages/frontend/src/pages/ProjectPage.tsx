@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChatComponent } from "../components/ChatComponent";
 import { CommentForm } from "../components/CommentForm";
 import { CommentList } from "../components/CommentList";
+import { LlmsTxtDownloader } from "../components/LlmsTxtDownloader";
 import { ProjectQuestionsAndStances } from "../components/ProjectQuestionsAndStances";
 import { ProjectReport } from "../components/ProjectReport";
 // import { ProjectVisualReport } from '../components/ProjectVisualReport';
@@ -289,7 +290,12 @@ export const ProjectPage = () => {
           </>
         )}
 
-        {activeTab === "overall" && <ProjectReport project={project} />}
+        {activeTab === "overall" && (
+          <>
+            <LlmsTxtDownloader projectId={projectId} />
+            <ProjectReport project={project} />
+          </>
+        )}
 
         {activeTab === "visual" && (
           <div className="bg-white rounded-lg shadow-sm p-6">

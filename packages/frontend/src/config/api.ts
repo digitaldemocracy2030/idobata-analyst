@@ -269,6 +269,59 @@ export const generateProjectVisualReport = async (
   }
 };
 
+// LLMs.txt関連のAPI
+export const generateLlmsTxt = async (
+  projectId: string,
+  forceRegenerate = false,
+): Promise<any> => {
+  console.log("Generating LLMs.txt for project:", projectId);
+  console.log("Force regenerate:", forceRegenerate);
+
+  const queryParams = new URLSearchParams({
+    ...(forceRegenerate && { forceRegenerate: "true" }),
+  });
+
+  const endpoint = `${API_URL}/projects/${projectId}/llms-txt?${queryParams}`;
+  console.log("LLMs.txt endpoint:", endpoint);
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: getHeaders(),
+    });
+
+    console.log("LLMs.txt response status:", response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("LLMs.txt generation failed:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText,
+      });
+      throw new Error("LLMs.txtの生成に失敗しました");
+    }
+
+    const result = await response.json();
+    console.log("LLMs.txt result:", result);
+    return result;
+  } catch (error) {
+    console.error("LLMs.txt error:", error);
+    throw error;
+  }
+};
+
+// LLMs.txtをダウンロードするためのヘルパー関数
+export const downloadLlmsTxt = (projectId: string, type: "basic" | "full" = "basic") => {
+  const queryParams = new URLSearchParams({
+    type,
+  });
+  
+  const endpoint = `${API_URL}/projects/${projectId}/llms-txt/download?${queryParams}`;
+  
+  // 新しいタブでダウンロードURLを開く
+  window.open(endpoint, "_blank");
+};
+
 // プロジェクト関連のAPI
 export const getProject = async (projectId: string) => {
   const response = await fetch(`${API_URL}/projects/${projectId}`, {
