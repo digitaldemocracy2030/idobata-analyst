@@ -98,3 +98,8 @@
 .markdown .highlight pre {
   @apply bg-gray-100 !important;
 }
+
+body.embedded-visual-analysis {
+  padding: 0;
+  margin: 0;
+}
