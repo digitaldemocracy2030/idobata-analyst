@@ -6,7 +6,11 @@ import { analyzeStances } from "../config/api";
 import type { Comment, CommentSourceType } from "../types/comment";
 import type { Project, Question, StanceAnalysisReport } from "../types/project";
 import { convertBoldBrackets } from "../utils/markdownHelper";
-import { StanceGraphComponent } from "./StanceGraphComponent";
+import {
+  CHART_COLORS,
+  OTHER_COLOR,
+  StanceGraphComponent,
+} from "./StanceGraphComponent";
 
 interface StanceAnalyticsProps {
   comments: Comment[];
@@ -168,11 +172,11 @@ export const StanceReport = ({
 
   //コメント種類分布用計算
   // コメントの種類ごとの件数を集計
-  const sourceTypeCounts: { [key: CommentSourceType]: number } = {};
-  comments.forEach(comment => {
-    const sourceType = comment.sourceType || 'other';
+  const sourceTypeCounts: Record<string, number> = {};
+  for (const comment of comments) {
+    const sourceType = comment.sourceType || "other";
     sourceTypeCounts[sourceType] = (sourceTypeCounts[sourceType] || 0) + 1;
-  });
+  }
   // 全体のコメント数
   const totalComments = comments.length;
 
@@ -222,20 +226,28 @@ export const StanceReport = ({
 
         {/*コメント種類分布*/}
         <div className="text-right mb-4">
-        コメントの種類分布：
-        {Object.entries(sourceTypeCounts)
-          .sort(([, countA], [, countB]) => countB - countA)
-          .map(([sourceType, count], index) => {
-            const percentage = totalComments > 0 ? ((count / totalComments) * 100).toFixed(1) : '0.0';
-            const sourceTypeName = getSourceTypeName(sourceType as CommentSourceType);
-            const style = getSourceTypeStyle(sourceType as CommentSourceType);
-            return (
-              <span key={sourceType} className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mr-1 ${style}`}>
-                {sourceTypeName}:{count}件({percentage}%)
-              </span>
-            );
-          })}
-      </div>
+          コメントの種類分布：
+          {Object.entries(sourceTypeCounts)
+            .sort(([, countA], [, countB]) => countB - countA)
+            .map(([sourceType, count]) => {
+              const percentage =
+                totalComments > 0
+                  ? ((count / totalComments) * 100).toFixed(1)
+                  : "0.0";
+              const sourceTypeName = getSourceTypeName(
+                sourceType as CommentSourceType,
+              );
+              const style = getSourceTypeStyle(sourceType as CommentSourceType);
+              return (
+                <span
+                  key={sourceType}
+                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mr-1 ${style}`}
+                >
+                  {sourceTypeName}:{count}件({percentage}%)
+                </span>
+              );
+            })}
+        </div>
 
         {/* コメントリスト */}
         <div className="space-y-3 my-4">
@@ -263,13 +275,23 @@ export const StanceReport = ({
                             <div
                               key={comment._id}
                               className={`
-                              bg-white px-3 py-2 text-sm border-l-4 border-blue-400
+                              bg-white px-3 py-2 text-sm border-l-4
                               ${
                                 !expandedStances[stanceId] && index === 2
                                   ? "relative"
                                   : ""
                               }
                             `}
+                              style={{
+                                borderLeftColor:
+                                  stanceId === "other"
+                                    ? OTHER_COLOR
+                                    : CHART_COLORS[
+                                        selectedQuestion.stances.findIndex(
+                                          (s) => s.id === stanceId,
+                                        ) % CHART_COLORS.length
+                                      ],
+                              }}
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
