@@ -1,6 +1,10 @@
 import express from "express";
+import { AppError } from "../middleware/errorHandler";
 import { validateObjectId } from "../middleware/validateObjectId";
+import { Comment } from "../models/comment";
+import { Project } from "../models/project";
 import { AnalysisService } from "../services/analysisService";
+import { LlmsTxtGenerator } from "../services/llmsTxtGenerator";
 import { ProjectReportGenerator } from "../services/projectReportGenerator";
 import { ProjectVisualReportGenerator } from "../services/projectVisualReportGenerator";
 import { StanceReportGenerator } from "../services/stanceReportGenerator";
@@ -11,6 +15,7 @@ const router = express.Router();
 const stanceReportGenerator = new StanceReportGenerator();
 const projectReportGenerator = new ProjectReportGenerator();
 const projectVisualReportGenerator = new ProjectVisualReportGenerator();
+const llmsTxtGenerator = new LlmsTxtGenerator();
 const analysisService = new AnalysisService(
   stanceReportGenerator,
   projectReportGenerator,
@@ -102,6 +107,77 @@ router.get(
         `attachment; filename=project-${projectId}-export.csv`,
       );
       res.send(csvData);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// プロジェクトのLLMs.txtを生成
+router.get(
+  "/projects/:projectId/llms-txt",
+  validateObjectId("projectId"),
+  async (req, res, next) => {
+    try {
+      const projectId = req.params.projectId;
+      const forceRegenerate = req.query.forceRegenerate === "true";
+      
+      // プロジェクトとコメントを取得
+      const project = await Project.findById(projectId);
+      if (!project) {
+        throw new AppError(404, "Project not found");
+      }
+      
+      const comments = await Comment.find({ projectId });
+      
+      // LLMs.txtを生成
+      const llmsTxtResult = await llmsTxtGenerator.generateLlmsTxt(
+        project,
+        comments,
+        forceRegenerate,
+      );
+      
+      res.json(llmsTxtResult);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// プロジェクトのLLMs.txtをテキストとして取得
+router.get(
+  "/projects/:projectId/llms-txt/download",
+  validateObjectId("projectId"),
+  async (req, res, next) => {
+    try {
+      const projectId = req.params.projectId;
+      const type = req.query.type === "full" ? "full" : "basic";
+      const forceRegenerate = req.query.forceRegenerate === "true";
+      
+      // プロジェクトとコメントを取得
+      const project = await Project.findById(projectId);
+      if (!project) {
+        throw new AppError(404, "Project not found");
+      }
+      
+      const comments = await Comment.find({ projectId });
+      
+      // LLMs.txtを生成
+      const llmsTxtResult = await llmsTxtGenerator.generateLlmsTxt(
+        project,
+        comments,
+        forceRegenerate,
+      );
+      
+      const content = type === "full" ? llmsTxtResult.llmsFullTxt : llmsTxtResult.llmsTxt;
+      const filename = type === "full" ? "llms-full.txt" : "llms.txt";
+      
+      res.setHeader("Content-Type", "text/markdown");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${filename}`,
+      );
+      res.send(content);
     } catch (error) {
       next(error);
     }

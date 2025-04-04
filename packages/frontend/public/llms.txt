@@ -1,0 +1,34 @@
+# いどばた論点整理モジュール (Idobata Analyst)
+
+> いどばた論点整理モジュールは、オンライン上の政策熟議プラットフォームを構築する「いどばた」プロジェクトの一部です。このモジュールは、フォーラムやSNSの投稿を分析し、論点を抽出して整理するためのツールです。
+
+このプロジェクトは、日本のデジタル民主主義を促進するための取り組みの一環です。論点整理モジュールは、多様な意見を収集し、それらを分析して主要な論点を特定し、各論点に対する異なる立場を明確にします。
+
+## プロジェクト概要
+
+- [プロジェクト全体の説明](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/README.md): いどばたプロジェクトの概要と目的
+- [論点整理モジュールの機能](https://github.com/digitaldemocracy2030/idobata-analyst/tree/main/packages/backend/src/routes): バックエンドAPIの機能と実装
+- [フロントエンド実装](https://github.com/digitaldemocracy2030/idobata-analyst/tree/main/packages/frontend/src): ユーザーインターフェースの実装
+
+## 主要機能
+
+- [CSVアップロード機能](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/packages/frontend/src/pages/CsvUpload.tsx): 投稿データのCSVアップロード
+- [論点抽出処理](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/packages/backend/src/services/extraction.ts): AIを使った論点抽出の実装
+- [立場分析](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/packages/backend/src/services/stance.ts): 各投稿の立場を分析する機能
+- [ビジュアルレポート](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/packages/backend/src/services/visualReport.ts): 分析結果のビジュアル表示
+
+## 技術スタック
+
+- [バックエンド構成](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/packages/backend/package.json): Express.js、MongoDB、OpenRouter API
+- [フロントエンド構成](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/packages/frontend/package.json): React、TypeScript、Chakra UI
+
+## 開発への参加
+
+- [開発者向けガイド](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/README.md#開発への参加方法について): プロジェクトへの貢献方法
+- [オープンイシュー](https://github.com/digitaldemocracy2030/idobata-analyst/issues): 現在のイシューと改善点
+
+## Optional
+
+- [Docker設定](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/compose.yaml): 開発環境のDocker構成
+- [環境変数設定](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/.env.example): 必要な環境変数の設定例
+- [コントリビューターライセンス](https://github.com/digitaldemocracy2030/idobata-analyst/blob/main/CLA.md): コントリビューターライセンス同意書
