@@ -1,6 +1,6 @@
-import { createServer } from "node:http";
 import axios from "axios";
 import express from "express";
+import { createServer } from "node:http";
 import OpenAI from "openai";
 import { type WebSocket, WebSocketServer } from "ws";
 import { SessionManager } from "./services/SessionManager";
@@ -99,6 +99,7 @@ interface CommentResponse {
       questionId: string;
       stanceId: string;
       confidence: number;
+      extractedContent: string;
     }>;
   };
   analyzedQuestions: Array<{
@@ -108,6 +109,7 @@ interface CommentResponse {
       questionId: string;
       stanceId: string;
       confidence: number;
+      extractedContent: string;
     }>;
   }>;
 }
@@ -124,6 +126,7 @@ async function analyzeUserMessage(
     stance: {
       stanceId: string;
       confidence: number;
+      extractedContent: string;
     };
   }>;
 }> {
@@ -226,6 +229,7 @@ ${userMessage}
             questionId: string;
             stanceId: string;
             confidence: number;
+            extractedContent: string;
           }>;
         }) => {
           const stance = q.stances[0]; // 最も確信度の高い立場を使用
@@ -236,6 +240,7 @@ ${userMessage}
             stance: {
               stanceId: stance.stanceId,
               confidence: stance.confidence,
+              extractedContent: stance.extractedContent,
             },
           };
         },

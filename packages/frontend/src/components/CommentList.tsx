@@ -167,7 +167,9 @@ export const CommentList = ({ comments, project }: CommentListProps) => {
                           comment.sourceType,
                         )}`}
                       >
-                        {getSourceTypeName(comment.sourceType)}
+                        {`元のコメントを表示：${getSourceTypeName(
+                          comment.sourceType,
+                        )}`}
                       </a>
                     ) : (
                       <span
@@ -175,7 +177,9 @@ export const CommentList = ({ comments, project }: CommentListProps) => {
                           comment.sourceType,
                         )}`}
                       >
-                        {getSourceTypeName(comment.sourceType)}
+                        {`元のコメントを表示：${getSourceTypeName(
+                          comment.sourceType,
+                        )}`}
                       </span>
                     )}
                     <div className="invisible group-hover:visible absolute z-10 w-96 p-2 mt-2 text-sm bg-gray-900 text-white rounded shadow-lg right-full translate-x-24">

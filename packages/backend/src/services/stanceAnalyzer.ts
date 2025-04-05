@@ -5,24 +5,29 @@ export interface StanceAnalysisResult {
   questionId: string;
   stanceId: string | null;
   confidence: number | null;
+  extractedContent: string | null;
 }
 
 export class StanceAnalyzer {
-  private async parseResponse(
-    response: string,
-  ): Promise<{ stance: string | null; confidence: number | null }> {
+  private async parseResponse(response: string): Promise<{
+    stance: string | null;
+    confidence: number | null;
+    extractedContent: string | null;
+  }> {
     try {
       const cleaned = response.replace(/```json|```/g, "").trim();
       const result = JSON.parse(cleaned);
       return {
         stance: result.stance,
         confidence: result.confidence,
+        extractedContent: result.extractedContent,
       };
     } catch (error) {
       console.error("Failed to parse Gemini response:", error);
       return {
         stance: null,
         confidence: null,
+        extractedContent: null,
       };
     }
   }
@@ -75,10 +80,12 @@ export class StanceAnalyzer {
         questionId,
         stanceId: null,
         confidence: null,
+        extractedContent: null,
       };
     }
 
-    const { stance, confidence } = await this.parseResponse(response);
+    const { stance, confidence, extractedContent } =
+      await this.parseResponse(response);
 
     // confidenceが0.8未満、またはnullの場合は結果を棄却
     if (!confidence || confidence < 0.8) {
@@ -86,6 +93,7 @@ export class StanceAnalyzer {
         questionId,
         stanceId: null,
         confidence: null,
+        extractedContent: null,
       };
     }
 
@@ -98,6 +106,7 @@ export class StanceAnalyzer {
         questionId,
         stanceId: null,
         confidence: null,
+        extractedContent: null,
       };
     }
 
@@ -105,6 +114,7 @@ export class StanceAnalyzer {
       questionId,
       stanceId: matchedStance.id,
       confidence,
+      extractedContent: extractedContent,
     };
   }
 

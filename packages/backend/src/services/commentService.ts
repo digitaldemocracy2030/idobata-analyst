@@ -113,7 +113,7 @@ export class CommentService {
 
     for (const extractedContent of extractedContents) {
       const analysisResults = await this.stanceAnalyzer.analyzeAllStances(
-        extractedContent,
+        commentData.content,
         project.questions.map((q) => ({
           id: q.id,
           text: q.text,
@@ -206,7 +206,7 @@ export class CommentService {
         // Create a comment for each extracted content
         for (const extractedContent of extractedContents) {
           const analysisResults = await this.stanceAnalyzer.analyzeAllStances(
-            extractedContent,
+            content,
             project.questions.map((q) => ({
               id: q.id,
               text: q.text,

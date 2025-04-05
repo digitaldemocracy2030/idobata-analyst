@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { AppError } from "../middleware/errorHandler";
 import { Comment } from "../models/comment";
-import { IProject, type IQuestion, Project } from "../models/project";
+import { type IQuestion, Project } from "../models/project";
 import { processInBatches } from "../utils/batchProcessor";
 import type { QuestionGenerator } from "./questionGenerator";
 import type { StanceAnalyzer } from "./stanceAnalyzer";
@@ -134,7 +134,7 @@ export class ProjectService {
         }
         // 既存の立場情報を引き継ぐように修正
         const newStances = await this.stanceAnalyzer.analyzeAllStances(
-          comment.extractedContent,
+          comment.content,
           mappedQuestions,
           comment.stances || [], // 既存の立場情報を渡す
         );

@@ -4,6 +4,7 @@ export interface CommentStance {
   questionId: string;
   stanceId: string;
   confidence: number; // Gemini APIの判定信頼度
+  extractedContent: string;
 }
 
 export interface CommentInput {

@@ -169,8 +169,8 @@ export const StanceReport = ({
   //コメント種類分布用計算
   // コメントの種類ごとの件数を集計
   const sourceTypeCounts: { [key: CommentSourceType]: number } = {};
-  comments.forEach(comment => {
-    const sourceType = comment.sourceType || 'other';
+  comments.forEach((comment) => {
+    const sourceType = comment.sourceType || "other";
     sourceTypeCounts[sourceType] = (sourceTypeCounts[sourceType] || 0) + 1;
   });
   // 全体のコメント数
@@ -222,20 +222,28 @@ export const StanceReport = ({
 
         {/*コメント種類分布*/}
         <div className="text-right mb-4">
-        コメントの種類分布：
-        {Object.entries(sourceTypeCounts)
-          .sort(([, countA], [, countB]) => countB - countA)
-          .map(([sourceType, count], index) => {
-            const percentage = totalComments > 0 ? ((count / totalComments) * 100).toFixed(1) : '0.0';
-            const sourceTypeName = getSourceTypeName(sourceType as CommentSourceType);
-            const style = getSourceTypeStyle(sourceType as CommentSourceType);
-            return (
-              <span key={sourceType} className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mr-1 ${style}`}>
-                {sourceTypeName}:{count}件({percentage}%)
-              </span>
-            );
-          })}
-      </div>
+          コメントの種類分布：
+          {Object.entries(sourceTypeCounts)
+            .sort(([, countA], [, countB]) => countB - countA)
+            .map(([sourceType, count], index) => {
+              const percentage =
+                totalComments > 0
+                  ? ((count / totalComments) * 100).toFixed(1)
+                  : "0.0";
+              const sourceTypeName = getSourceTypeName(
+                sourceType as CommentSourceType,
+              );
+              const style = getSourceTypeStyle(sourceType as CommentSourceType);
+              return (
+                <span
+                  key={sourceType}
+                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mr-1 ${style}`}
+                >
+                  {sourceTypeName}:{count}件({percentage}%)
+                </span>
+              );
+            })}
+        </div>
 
         {/* コメントリスト */}
         <div className="space-y-3 my-4">
@@ -273,7 +281,41 @@ export const StanceReport = ({
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
+                                  {
+                                    comment.stances.find(
+                                      (s) =>
+                                        s.questionId === selectedQuestion.id,
+                                    )?.extractedContent
+                                  }
+                                </div>
+                                <div className="flex-1">
                                   {comment.extractedContent}
+                                  {comment.content && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const newState = { ...expandedStances };
+                                        newState[`comment_${comment._id}`] =
+                                          !newState[`comment_${comment._id}`];
+                                        setExpandedStances(newState);
+                                      }}
+                                      className="ml-1 text-xs text-blue-600 hover:text-blue-800"
+                                    >
+                                      {expandedStances[`comment_${comment._id}`]
+                                        ? "原文を非表示"
+                                        : "原文を表示"}
+                                    </button>
+                                  )}
+                                  {comment.content &&
+                                    expandedStances[
+                                      `comment_${comment._id}`
+                                    ] && (
+                                      <div className="mt-2 text-xs text-gray-700 bg-gray-50 p-2 rounded border border-gray-200 relative">
+                                        {comment.sourceType === "x"
+                                          ? "X(Twitter)の規約上、元のコンテンツを表示できません。リンクから元の投稿をご確認ください。"
+                                          : comment.content}
+                                      </div>
+                                    )}
                                 </div>
                                 {comment.sourceType && (
                                   <div className="ml-2 flex-shrink-0">
@@ -326,7 +368,7 @@ export const StanceReport = ({
                       <button
                         type="button"
                         onClick={() => toggleStanceExpand(stanceId)}
-                        className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                        className="inline-flex items-center justify-center gap-1 text-sm text-blue-600 hover:text-blue-700 font-medium w-full"
                       >
                         {!expandedStances[stanceId] ? (
                           <>

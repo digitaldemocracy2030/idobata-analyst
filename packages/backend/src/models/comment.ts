@@ -6,6 +6,7 @@ export interface ICommentStance {
   questionId: string;
   stanceId: string;
   confidence: number;
+  extractedContent: string;
 }
 
 export interface IComment {
@@ -32,6 +33,10 @@ const commentStanceSchema = new mongoose.Schema<ICommentStance>({
     required: true,
     min: 0,
     max: 1,
+  },
+  extractedContent: {
+    type: String,
+    required: false, // XXX: 旧データとの互換性のため
   },
 });
 
