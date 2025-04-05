@@ -17,7 +17,7 @@ function App() {
       <div className={`min-h-screen ${!isEmbedded ? "bg-gray-50" : ""}`}>
         {isAdmin && !isEmbedded && (
           <nav className="bg-white shadow-sm">
-            <div className="max-w-4xl mx-auto px-4 py-3 flex gap-4">
+            <div className="mx-auto px-4 py-3 flex gap-4 max-w-[90%] w-full">
               <Link to="/" className="text-blue-500 hover:text-blue-600">
                 ホーム
               </Link>

@@ -4,7 +4,7 @@ export const HomePage = () => {
   const isAdmin = !!localStorage.getItem("adminKey");
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-[90%] w-full mx-auto py-8 px-4">
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           コメント分析システム

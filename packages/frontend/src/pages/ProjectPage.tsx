@@ -126,7 +126,7 @@ export const ProjectPage = () => {
 
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto py-8 px-4">
+      <div className="max-w-[90%] w-full mx-auto py-8 px-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto" />
           <p className="mt-4 text-gray-500">読み込み中...</p>
@@ -137,7 +137,7 @@ export const ProjectPage = () => {
 
   if (!projectId || !project) {
     return (
-      <div className="max-w-4xl mx-auto py-8 px-4">
+      <div className="max-w-[90%] w-full mx-auto py-8 px-4">
         <div className="text-center">
           <p className="text-red-500">プロジェクトが見つかりませんでした</p>
         </div>
@@ -146,7 +146,7 @@ export const ProjectPage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-[90%] w-full mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">{project.name}</h1>
       {project.description && (
         <p className="text-gray-700 mb-8">{project.description}</p>

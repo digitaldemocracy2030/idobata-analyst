@@ -10,7 +10,7 @@ export const PromptSettingsPage: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[90%] w-full mx-auto">
         <h1 className="text-3xl font-bold mb-8">プロンプト設定</h1>
         <div className="bg-white shadow-md rounded-lg p-6">
           <p className="text-gray-600 mb-6">
