@@ -46,6 +46,7 @@ services:
     environment:
       - MONGODB_URI=mongodb://${MONGO_APP_USERNAME}:${MONGO_APP_PASSWORD}@mongodb:27017/comment-system?authSource=comment-system
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - SLACK_WEBHOOK_URL_LOGGING=${SLACK_WEBHOOK_URL_LOGGING}
       - PORT=3001
     depends_on:
       mongodb:
@@ -72,6 +73,7 @@ services:
       - PORT=3030
       - BACKEND_API_URL=http://backend:3001/api
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - SLACK_WEBHOOK_URL_LOGGING=${SLACK_WEBHOOK_URL_LOGGING}
       - ADMIN_API_KEY=${ADMIN_API_KEY}
     depends_on:
       - backend
