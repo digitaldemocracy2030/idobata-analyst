@@ -21,7 +21,7 @@ interface StanceStats {
 }
 
 // 円グラフ用の色
-const CHART_COLORS = [
+export const CHART_COLORS = [
   "#3B82F6", // blue-500
   "#10B981", // emerald-500
   "#F59E0B", // amber-500
@@ -31,6 +31,7 @@ const CHART_COLORS = [
   "#6366F1", // indigo-500
   "#14B8A6", // teal-500
 ];
+export const OTHER_COLOR = "#6B7280"; // gray-500
 
 // カスタムツールチップ
 const CustomTooltip = ({ active, payload }: any) => {
@@ -97,6 +98,7 @@ export const StanceGraphComponent = ({
     .map(([stanceId, stats]) => ({
       name: getStanceName(stanceId),
       value: stats.count,
+      isOther: stanceId === "other",
     }));
 
   return (
@@ -126,7 +128,11 @@ export const StanceGraphComponent = ({
                 {chartData.map((_, index) => (
                   <Cell
                     key={`cell-${chartData[index].name}-${index}`}
-                    fill={CHART_COLORS[index % CHART_COLORS.length]}
+                    fill={
+                      chartData[index].isOther
+                        ? OTHER_COLOR
+                        : CHART_COLORS[index % CHART_COLORS.length]
+                    }
                   />
                 ))}
               </Pie>
