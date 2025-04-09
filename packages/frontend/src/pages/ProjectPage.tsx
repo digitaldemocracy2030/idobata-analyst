@@ -292,7 +292,7 @@ export const ProjectPage = () => {
         {activeTab === "overall" && <ProjectReport project={project} />}
 
         {activeTab === "visual" && (
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm">
             <iframe
               src={`/embed/projects/${projectId}/visual`}
               className="w-full border-0"
